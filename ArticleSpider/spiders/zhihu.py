@@ -130,7 +130,46 @@ class ZhihuSpider(scrapy.Spider):
             import time
             t = str(int(time.time() * 1000))
             captcha_url = 'https://www.zhihu.com/captcha.git?r={0}&type=login'.format(t)
+            captcha_url_cn = 'https://www.zhihu.com/captcha.git?r={0}&type=login&lang=cn'.format(t)
+            yield scrapy.Request(captcha_url_cn, headers=self.headers, meta={"post_data":post_data}, callback=self.login_after_captcha_cn)
             yield scrapy.Request(captcha_url, headers=self.headers, meta={"post_data":post_data}, callback=self.login_after_captcha)
+
+    def login_after_captcha_cn(self, response):
+        # 知乎倒立汉字验证码识别登录
+        with open("captcha.jpg", "wb") as f:
+            f.write(response.boby)
+            f.close()
+
+        from zheye import zheye
+        z = zheye()
+        positions = z.Recognize('captcha.jpg')
+
+        pos_arr = []
+        if len(positions) == 2:
+            if positions[0][1] > positions[1][1]:
+                pos_arr.append([positions[1][1], positions[1][0]])
+                pos_arr.append([positions[0][1], positions[0][0]])
+            else:
+                pos_arr.append([positions[0][1], positions[0][0]])
+                pos_arr.append([positions[1][1], positions[1][0]])
+        else:
+            pos_arr.append([positions[0][1], positions[0][0]])
+
+        post_url = 'https://www.zhihu.com/login/phone_num'
+        post_data = response.meta.get("post_data", {})
+        if len(positions) == 2:
+            post_data["captcha"] = '{"img_size": [200, 44], "input_points": [[%.2f, %f], [%.2f, %f]]}' % (
+                pos_arr[0][1] / 2, pos_arr[0][0] / 2, pos_arr[1][1] / 2, pos_arr[1][0] / 2)
+        else:
+            post_data["captcha"] = '{"img_size": [200, 44], "input_points": [[%.2f, %f]}' % (
+                pos_arr[0][1] / 2, pos_arr[0][0] / 2)
+        post_data['captcha_type'] = 'cn'
+        return [scrapy.FormRequest(
+            url=post_url,
+            formdata=post_data,
+            headers=self.headers,
+            callback=self.check_login
+        )]
 
     def login_after_captcha(self, response):
         with open("captcha.jpg", "wb") as f:
