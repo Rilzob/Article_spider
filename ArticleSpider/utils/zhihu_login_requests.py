@@ -50,6 +50,24 @@ def get_index():
         f.write(response.text.encode("utf-8"))
     print("ok")
 
+def get_captcha():
+    import time
+    t = str(int(time.time()*1000))
+    captcha_url = 'https://www.zhihu.com/captcha.git?r={0}&type=login'.format(t)
+    t = session.get(captcha_url, headers=header)
+    with open("captcha.jpg", "wb") as f:
+        f.write(t.content)
+        f.close()
+    from PIL import Image
+    try:
+        im = Image.open('captcha.jpg')
+        im.show()
+        im.close()
+    except:
+        pass
+
+    captcha = input("输入验证码\n>")
+    return captcha
 
 def zhihu_login(account, password):
     # 知乎登陆
@@ -59,7 +77,8 @@ def zhihu_login(account, password):
         post_data = {
             "_xsrf": get_xsrf(),
             "phone_num": account,
-            "password": password
+            "password": password,
+            "captcha": get_captcha()
         }
     else:
         if "@" in account:
@@ -72,3 +91,10 @@ def zhihu_login(account, password):
             }
     response_text = session.post(post_url, data=post_data, headers=header)
     session.cookies.save()
+
+
+zhihu_login("15724428236", "watermirrorsir")
+#get_index(
+is_login()
+
+# get_captcha()
