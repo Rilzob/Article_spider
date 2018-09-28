@@ -35,7 +35,7 @@ ROBOTSTXT_OBEY = False
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = True
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -66,15 +66,15 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    # 'ArticleSpider.pipelines.JsonExporterPipeline': 2,
-    # 'scrapy.pipelines.images.ImagesPipeline': 1,
-    # 'ArticleSpider.pipelines.ArticleImagePipeline': 1,
-    'ArticleSpider.pipelines.MysqlPipeline': 1,
-}
-IMAGES_URLS_FIELD = "front_image_url"
-project_dir = os.path.abspath(os.path.dirname(__file__))
-IMAGES_STORE = os.path.join(project_dir, 'images')
+# ITEM_PIPELINES = {
+#     # 'ArticleSpider.pipelines.JsonExporterPipeline': 2,
+#     # 'scrapy.pipelines.images.ImagesPipeline': 1,
+#     # 'ArticleSpider.pipelines.ArticleImagePipeline': 1,
+#     'ArticleSpider.pipelines.MysqlPipeline': 1,
+# }
+# IMAGES_URLS_FIELD = "front_image_url"
+# project_dir = os.path.abspath(os.path.dirname(__file__))
+# IMAGES_STORE = os.path.join(project_dir, 'images')
 
 
 # Enable and configure the AutoThrottle extension (disabled by default)

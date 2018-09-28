@@ -82,3 +82,54 @@ class JobBoleArticleItem(scrapy.Item):
     )
     content = scrapy.Field()
 
+    def get_insert_sql(self):
+        insert_sql = """
+            insert into jobbole_article(title, url, create_date, fav_nums)
+            values (%s, %s, %s, %s)
+        """
+        params = (self['title'], self['url'], self['create_date'], self['fav_nums'])
+        return insert_sql, params
+
+class ZhihuQuestionItem(scrapy.Item):
+    # 知乎的问题item
+    zhihu_id = scrapy.Field()
+    topics = scrapy.Field()
+    url = scrapy.Field()
+    title = scrapy.Field()
+    content = scrapy.Field()
+    answer_num = scrapy.Field()
+    comments_num = scrapy.Field()
+    watch_user_num = scrapy.Field()
+    click_num = scrapy.Field()
+    crawl_time = scrapy.Field()
+
+    def get_insert_sql(self):
+        # 插入知乎question表的sql语句
+        insert_sql = '''
+            insert into zhihu_question(zhihu_id, topics, url, title, content, answer_num, comments_num, 
+                watch_user_num, click_num, crawl_time            
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        '''
+        zhihu_id = int("".join(self['zhihu_id']))
+        topics = ",".join(self['topics'])
+        url = self['url'][0]  # 等价于"".join(self['url'])
+        title = "".join(self['title'])
+        content = "".join(self['content'])
+        params = ()
+
+class ZhihuAnswerItem(scrapy.Item):
+    # 知乎的问题回答item
+    zhihu_id = scrapy.Field()
+    url = scrapy.Field()
+    question_id = scrapy.Field()
+    author_id = scrapy.Field()
+    content = scrapy.Field()
+    parise_num = scrapy.Field()
+    comments_num = scrapy.Field()
+    create_time = scrapy.Field()
+    update_time = scrapy.Field()
+    crawl_time = scrapy.Field()
+
+    def get_insert_sql(self):
+        pass
