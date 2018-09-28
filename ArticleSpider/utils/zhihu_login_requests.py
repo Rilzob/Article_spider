@@ -58,6 +58,7 @@ def get_captcha():
     with open("captcha.jpg", "wb") as f:
         f.write(t.content)
         f.close()
+
     from PIL import Image
     try:
         im = Image.open('captcha.jpg')
