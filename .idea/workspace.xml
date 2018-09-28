@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d56b42fc-b6ec-477c-8679-06f1d3d212eb" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ArticleSpider/items.py" beforeDir="false" afterPath="$PROJECT_DIR$/ArticleSpider/items.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ArticleSpider/pipelines.py" beforeDir="false" afterPath="$PROJECT_DIR$/ArticleSpider/pipelines.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ArticleSpider/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ArticleSpider/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ArticleSpider/spiders/zhihu.py" beforeDir="false" afterPath="$PROJECT_DIR$/ArticleSpider/spiders/zhihu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ArticleSpider/utils/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/ArticleSpider/utils/common.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -53,8 +50,8 @@
       <file leaf-file-name="items.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ArticleSpider/items.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
-              <caret line="153" column="9" lean-forward="true" selection-start-line="153" selection-start-column="9" selection-end-line="153" selection-end-column="9" />
+            <state relative-caret-position="420">
+              <caret line="116" column="39" selection-start-line="116" selection-start-column="39" selection-end-line="116" selection-end-column="39" />
               <folding>
                 <element signature="e#152#165#0" expanded="true" />
               </folding>
@@ -691,8 +688,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ArticleSpider/items.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="153" column="9" lean-forward="true" selection-start-line="153" selection-start-column="9" selection-end-line="153" selection-end-column="9" />
+        <state relative-caret-position="420">
+          <caret line="116" column="39" selection-start-line="116" selection-start-column="39" selection-end-line="116" selection-end-column="39" />
           <folding>
             <element signature="e#152#165#0" expanded="true" />
           </folding>

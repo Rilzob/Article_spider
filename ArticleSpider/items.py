@@ -88,7 +88,7 @@ class JobBoleArticleItem(scrapy.Item):
     def get_insert_sql(self):
         insert_sql = """
             insert into jobbole_article(title, url, create_date, fav_nums)
-            values (%s, %s, %s, %s)
+            values (%s, %s, %s, %s) ON DUPLICATE KEY UPDATE content=VALUES(favs_nums)
         """
         params = (self['title'], self['url'], self['create_date'], self['fav_nums'])
         return insert_sql, params
@@ -111,8 +111,10 @@ class ZhihuQuestionItem(scrapy.Item):
         insert_sql = '''
             insert into zhihu_question(zhihu_id, topics, url, title, content, answer_num, comments_num, 
                 watch_user_num, click_num, crawl_time            
-            )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            )VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON DUPICATE KEY UPDATE content=VALUES(content), answer_num=VALUES(answer_num),
+            comments_num=VALUES(comments_num), watch_user_num=VALUES(watch_user_num),
+            click_num=VALUES(click_num)
         '''
         zhihu_id = self['zhihu_id'][0]
         topics = ",".join(self['topics'])
@@ -143,15 +145,16 @@ class ZhihuAnswerItem(scrapy.Item):
     def get_insert_sql(self):
         # 插入知乎question表的sql语句
         insert_sql = '''
-            insert into zhihu_question(zhihu_id, url, question_id, author_id, content
+            insert into zhihu_answer(zhihu_id, url, question_id, author_id, content
                 parise_num, comments_num, create_time, update_time, crawl_time           
-            )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE content=VALUES(content), comments_num=VALUES(comments_num),
+            parise_num=VALUE(parise_num), update_time=VALUES(update_time)
         '''
         create_time = datetime.datetime.fromtimestamp(self['create_time']).strftime(SQL_DATETIME_FORMAT)
         update_time = datetime.datetime.fromtimestamp(self['update_time']).strftime(SQL_DATETIME_FORMAT)
         params = (
             self['zhihu_id'], self['url'], self['question_id'], self['author_id'], self['content'],
-            self['parise_num'], self['comments_num'], self['create_time'], self['update_time'], self['crawl_time'].strftime(SQL_DATETIME_FORMAT),
-
+            self['parise_num'], self['comments_num'], create_time, update_time, self['crawl_time'].strftime(SQL_DATETIME_FORMAT),
         )
+        return insert_sql, params
