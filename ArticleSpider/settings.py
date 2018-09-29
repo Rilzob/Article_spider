@@ -66,15 +66,19 @@ COOKIES_ENABLED = True
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#     # 'ArticleSpider.pipelines.JsonExporterPipeline': 2,
-#     # 'scrapy.pipelines.images.ImagesPipeline': 1,
-#     # 'ArticleSpider.pipelines.ArticleImagePipeline': 1,
-#     'ArticleSpider.pipelines.MysqlPipeline': 1,
-# }
-# IMAGES_URLS_FIELD = "front_image_url"
-# project_dir = os.path.abspath(os.path.dirname(__file__))
-# IMAGES_STORE = os.path.join(project_dir, 'images')
+ITEM_PIPELINES = {
+    # 'ArticleSpider.pipelines.JsonExporterPipeline': 2,
+    # 'scrapy.pipelines.images.ImagesPipeline': 1,
+    # 'ArticleSpider.pipelines.ArticleImagePipeline': 1,
+    'ArticleSpider.pipelines.MysqlPipeline': 1,
+}
+IMAGES_URLS_FIELD = "front_image_url"
+project_dir = os.path.abspath(os.path.dirname(__file__))
+IMAGES_STORE = os.path.join(project_dir, 'images')
+
+import sys
+BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.join(BASE_DIR, 'Article_spider'))
 
 
 # Enable and configure the AutoThrottle extension (disabled by default)
