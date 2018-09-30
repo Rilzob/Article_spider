@@ -15,11 +15,10 @@ class ZhihuSpider(scrapy.Spider):
     name = 'zhihu'
     allowed_domains = ['www.zhihu.com']
     start_urls = ['http://www.zhihu.com/']
-
     headers = {
         "HOST": "www.zhihu.com",
         "Referer": "https://www.zhihu.com",
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
+        "User-Agent": 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
     }
     # question的第一页answer的请求url
     start_answer_url = ""
@@ -39,6 +38,10 @@ class ZhihuSpider(scrapy.Spider):
             if match_obj:
                 # 如果提取到question相关的页面则下载后交由提取函数进行提取
                 request_url = match_obj.group(1)
+                import random
+                random_index = random.randint(0, len(user_agent_list))
+                random_agent = user_agent_list[random_index]
+                self.headers['User-Agent'] = random_agent
                 yield scrapy.Request(request_url, headers=self.headers, callback=self.parse_question)
             else:
                 # 如果不是question页面则直接进一步跟踪
