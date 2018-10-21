@@ -16,7 +16,7 @@ class ZhihuSpider(scrapy.Spider):
     start_urls = ['https://www.zhihu.com/']
 
     def start_requests(self):
-        browser = webdriver.Chrome(executable_path="/home/Rilzob/公共/Article_spider/chromedriver")
+        browser = webdriver.Chrome(executable_path="/home/Rilzob/公共/Articlespider/chromedriver")
         browser.get("https://www.zhihu.com/signin")
         browser.find_element_by_xpath("//*[@id='root']/div/main/div/div/div/div[2]/div[1]/form/div[1]/div[2]/div[1]/input").send_keys("15724428236")
         browser.find_element_by_xpath("//*[@id='root']/div/main/div/div/div/div[2]/div[1]/form/div[2]/div/div[1]/input").send_keys("watermirrorsir")
@@ -29,7 +29,7 @@ class ZhihuSpider(scrapy.Spider):
         import pickle
         for cookie in Cookies:
             # 写入文件
-            f = open('/home/Rilzob/公共/Article_spider/cookies/zhihu' + cookie['name'] + '.zhihu', 'wb')
+            f = open('/home/Rilzob/公共/Articlespider/cookies/zhihu' + cookie['name'] + '.zhihu', 'wb')
             pickle.dump(cookie, f)
             f.close()
             cookie_dict[cookie['name']] = cookie['value']

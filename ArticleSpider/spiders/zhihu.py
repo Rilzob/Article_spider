@@ -38,10 +38,6 @@ class ZhihuSpider(scrapy.Spider):
             if match_obj:
                 # 如果提取到question相关的页面则下载后交由提取函数进行提取
                 request_url = match_obj.group(1)
-                import random
-                random_index = random.randint(0, len(user_agent_list))
-                random_agent = user_agent_list[random_index]
-                self.headers['User-Agent'] = random_agent
                 yield scrapy.Request(request_url, headers=self.headers, callback=self.parse_question)
             else:
                 # 如果不是question页面则直接进一步跟踪
@@ -122,7 +118,7 @@ class ZhihuSpider(scrapy.Spider):
             xsrf = match_obj.group(1)
 
         if xsrf:
-            post_url = 'https://www.zhihu,com/login/phone_num'
+            post_url = 'https://www.zhihu.com/login/phone_num'
             post_data = {
                 "_xsrf": xsrf,
                 "phone_num": 15724428236,

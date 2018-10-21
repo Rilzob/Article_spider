@@ -1,6 +1,6 @@
 from selenium import webdriver
 
-browser = webdriver.Chrome(executable_path='/home/Rilzob/公共/Article_spider/chromedriver')
+browser = webdriver.Chrome(executable_path='/home/Rilzob/公共/Articlespider/chromedriver')
 
 browser.get('http://www.innotree.cn/login.html')
 print(browser.page_source)

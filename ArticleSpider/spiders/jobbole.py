@@ -98,7 +98,7 @@ class JobboleSpider(scrapy.Spider):
 
         # 通过item_loader加载item
         front_image_url = response.meta.get("front_image_url", "")  # 文章封面图
-        item_loader = ItemLoader(item=ArticleItemLoader(), response=response)
+        item_loader = ArticleItemLoader(item=JobBoleArticleItem(), response=response)
         item_loader.add_css('title', '.entry-header h1::text')
         item_loader.add_value('url', response.url)
         item_loader.add_value('url_object_id', get_md5(response.url))
@@ -108,7 +108,7 @@ class JobboleSpider(scrapy.Spider):
         item_loader.add_css('comment_nums', "a[href='#article-comment'] span::text")
         item_loader.add_css('fav_nums', 'span.bookmark-btn::text')
         item_loader.add_css('tags', 'p.entry-meta-hide-on-mobile a::text')
-        item_loader.add_css('content', "//div[@class='entry']")
+        item_loader.add_css('content', "div.entry")
         article_item = item_loader.load_item()
 
         yield article_item

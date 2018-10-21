@@ -13,6 +13,9 @@ from scrapy.loader.processors import MapCompose, TakeFirst, Join
 
 from ArticleSpider.utils.common import extract_num
 from ArticleSpider.settings import SQL_DATETIME_FORMAT, SQL_DATE_FORMAT
+from ArticleSpider.models.es_types import ArticleType
+from elasticsearch_dsl.connections import connections
+es = connections.create_connection(ArticleType._doc_type.using)
 
 from w3lib.html import remove_tags
 
@@ -56,6 +59,25 @@ def return_value(value):
     return value
 
 
+def gen_suggests(index, info_tuple):
+    #根据字符串生成搜索建议数组
+    used_words = set()
+    suggests = []
+    for text, weight in info_tuple:
+        if text:
+            #调用es的analyze接口分析字符串
+            words = es.indices.analyze(index=index, analyzer="ik_max_word", params={'filter':["lowercase"]}, body=text)
+            anylyzed_words = set([r["token"] for r in words["tokens"] if len(r["token"])>1])
+            new_words = anylyzed_words - used_words
+        else:
+            new_words = set()
+
+        if new_words:
+            suggests.append({"input":list(new_words), "weight":weight})
+
+    return suggests
+
+
 class ArticleItemLoader(ItemLoader):
     # 自定义itemloader
     default_output_processor = TakeFirst()
@@ -94,6 +116,27 @@ class JobBoleArticleItem(scrapy.Item):
         """
         params = (self['title'], self['url'], self['create_date'], self['fav_nums'])
         return insert_sql, params
+
+    def save_to_es(self):
+        article = ArticleType()
+        article.title = self['title']
+        article.create_date = self["create_date"]
+        article.content = remove_tags(self["content"])
+        article.front_image_url = self["front_image_url"]
+        if "front_image_path" in self:
+            article.front_image_path = self["front_image_path"]
+        article.praise_nums = self["praise_nums"]
+        article.fav_nums = self["fav_nums"]
+        article.comment_nums = self["comment_nums"]
+        article.url = self["url"]
+        article.tags = self["tags"]
+        article.meta.id = self["url_object_id"]
+
+        article.save()
+
+        article.suggest = gen_suggests(ArticleType._doc_type.index, ((article.title,10),(article.tags, 7)))
+
+        return
 
 class ZhihuQuestionItem(scrapy.Item):
     # 知乎的问题item
