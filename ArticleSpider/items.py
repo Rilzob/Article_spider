@@ -132,9 +132,9 @@ class JobBoleArticleItem(scrapy.Item):
         article.tags = self["tags"]
         article.meta.id = self["url_object_id"]
 
-        article.save()
-
         article.suggest = gen_suggests(ArticleType._doc_type.index, ((article.title,10),(article.tags, 7)))
+
+        article.save()
 
         return
 
