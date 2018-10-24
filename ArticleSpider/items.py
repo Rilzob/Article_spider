@@ -8,6 +8,7 @@
 import scrapy
 import datetime
 import re
+import redis
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import MapCompose, TakeFirst, Join
 
@@ -16,6 +17,7 @@ from ArticleSpider.settings import SQL_DATETIME_FORMAT, SQL_DATE_FORMAT
 from ArticleSpider.models.es_types import ArticleType
 from elasticsearch_dsl.connections import connections
 es = connections.create_connection(ArticleType._doc_type.using)
+redis_cli = redis.StrictRedis(host="localhost")
 
 from w3lib.html import remove_tags
 
@@ -135,6 +137,8 @@ class JobBoleArticleItem(scrapy.Item):
         article.suggest = gen_suggests(ArticleType._doc_type.index, ((article.title,10),(article.tags, 7)))
 
         article.save()
+
+        redis_cli.incr("jobbole_count")
 
         return
 
